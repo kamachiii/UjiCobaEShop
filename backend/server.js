@@ -3,44 +3,39 @@ const cors = require('cors');
 const app = express();
 
 /**
- * 1. KONFIGURASI CORS (PENTING UNTUK PEMULA)
- * Di sini kita mengizinkan Frontend React untuk mengambil data API dari Server Express.
- * Pastikan port frontend sesuai dengan yang berjalan di laptop kalian (Vite = 5173, CRA = 3000)
+ * 1. KONFIGURASI CORS (PENTING)
+ * Mengizinkan Frontend React (biasanya di port 5173 untuk Vite atau 3000 untuk CRA)
+ * mengambil data dari Server Express ini tanpa terblokir masalah keamanan browser.
  */
 app.use(cors({
-    origin: 'http://localhost:5173', // Ganti port-nya jika React menggunakan port 3000
-    credentials: true
+    origin: 'http://localhost:5173', // Sesuaikan dengan port React Anda
+    credentials: true // Mengizinkan pengiriman cookie/token jika diperlukan
 }));
 
 /**
  * 2. PARSING JSON BODY
- * Middleware ini agar Express bisa membaca data request dari frontend berupa JSON (req.body)
+ * Memastikan Express bisa membaca data request (req.body) yang dikirim frontend dalam format JSON.
  */
 app.use(express.json());
 
 /**
- * 3. ROUTING MODULAR (CEGAH FILE INI TERLALU BESAR)
- * Kalian (tim Backend) nanti akan memisahkan file logic ke dalam folder /routes.
- * Lalu kalian tinggal 'import' dan 'use' seperti contoh di bawah ini:
+ * 3. ROUTING API (CONTOH)
+ * Di sini nanti kalian menghubungkan file-file di folder /routes ke server utama.
  */
-
-// Contoh (Silakan di-uncomment nanti saat file route-nya sudah kalian buat):
-// const authRoutes = require('./routes/auth');
-// const productRoutes = require('./routes/products');
-// const orderRoutes = require('./routes/orders');
-
-// app.use('/api/auth', authRoutes);
-// app.use('/api/products', productRoutes);
-// app.use('/api/orders', orderRoutes);
-
-
-// Rute 'Testing' dasar
 app.get('/', (req, res) => {
-    res.json({ message: 'Selamat datang di API E-Shop! (Backend Berjalan Sehat)' });
+    res.json({ message: 'API E-Shop MVP berjalan dengan sehat!' });
 });
 
-// Jalankan Server
+// Contoh mengaktifkan rute (hilangkan komentar nanti kalau file router sudah dibuat):
+// const cartRoutes = require('./routes/cart');
+// const checkoutRoutes = require('./routes/checkout');
+// const dummyAuth = require('./middleware/dummyAuth');
+
+// Terapkan dummy middleware di rute yang butuh login
+// app.use('/api/cart', dummyAuth, cartRoutes);
+// app.use('/api/checkout', dummyAuth, checkoutRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server Express (Backend) berlari di port: ${PORT}`);
+    console.log(`Server Backend menyala di http://localhost:${PORT}`);
 });
